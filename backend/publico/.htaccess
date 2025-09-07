@@ -1,0 +1,20 @@
+# backend/publico/.htaccess
+
+# Activar la reescritura de URLs
+RewriteEngine On
+RewriteBase /nexus_inventario/backend/publico/
+
+# Redirigir todo a index.php excepto archivos y carpetas existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Configuración de cabeceras CORS (opcional, si Apache no pasa bien los headers desde PHP)
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>
+
+# Manejar errores 404 dentro de PHP
+ErrorDocument 404 /index.php

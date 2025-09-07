@@ -1,0 +1,23 @@
+# Activar el motor de reescritura de URLs
+RewriteEngine On
+
+# Si la solicitud es para un archivo o directorio real, no hagas nada
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Evita la reescritura para la carpeta de assets del frontend
+RewriteRule ^frontend/assets/(.*)$ frontend/assets/$1 [L,QSA]
+
+# Si la solicitud es para el backend, reescribe la URL a su index.php
+RewriteRule ^backend/(.*)$ backend/index.php [L,QSA]
+
+# Para el resto de las solicitudes (frontend), reescribe a la carpeta frontend
+RewriteRule ^(.*)$ frontend/$1 [L,QSA]
+
+# Configuración de CORS para el desarrollo
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>

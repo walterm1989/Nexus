@@ -1,0 +1,13 @@
+/* frontend/dashboard/common.css */
+.main{
+  display:grid; grid-template-columns: 220px 1fr; gap:16px; padding:16px;
+}
+.content{ min-height: calc(100vh - 56px - 40px); }
+.page-title{ font-size:22px; font-weight:700; margin:10px 0 16px; }
+.toolbar{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+.card.stat{ display:flex; align-items:center; justify-content:space-between; }
+.stat .value{ font-size:26px; font-weight:800; }
+.stat .label{ color:#777; }
+.alert{ padding:12px; background:#fff8e1; border:1px solid #ffe0b2; border-radius:10px; }
+.list{ display:flex; flex-direction:column; gap:8px; }
+.item{ display:flex; align-items:center; justify-content:space-between; padding:10px; background:#fff; border-radius:10px; box-shadow:var(--shadow); }
