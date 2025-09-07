@@ -2,12 +2,11 @@
 
 # Activar la reescritura de URLs
 RewriteEngine On
-RewriteBase /nexus_inventario/backend/publico/
 
 # Redirigir todo a index.php excepto archivos y carpetas existentes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [QSA,L]
+RewriteRule ^ index.php [QSA,L]
 
 # Configuración de cabeceras CORS (opcional, si Apache no pasa bien los headers desde PHP)
 <IfModule mod_headers.c>

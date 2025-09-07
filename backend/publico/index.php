@@ -22,3 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Cargar las rutas de la aplicación
 require_once __DIR__ . '/../app/rutas.php';
+
+// Despachar la solicitud usando el enrutador definido en app/rutas.php
+if (isset($enrutador)) {
+    $enrutador->dispatch();
+} else {
+    http_response_code(500);
+    echo json_encode(['estado' => 'error', 'mensaje' => 'Enrutador no inicializado']);
+}
