@@ -3,12 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const tablaBody = document.querySelector('#tablaProductos tbody');
 
     function cargarProductos() {
-        fetch(`../../backend/app/rutas.php?ruta=productos`)
-            .then(res => res.json())
+        App.api.get('/productos')
             .then(data => {
                 tablaBody.innerHTML = '';
                 if(data.estado === 'exito') {
-                    data.datos.registros.forEach(producto => {
+                    const registros = (data.datos && (data.datos.registros || data.datos)) || [];
+                    registros.forEach(producto => {
                         const fila = document.createElement('tr');
                         fila.innerHTML = `
                             <td>${producto.id}</td>
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <td>${producto.marca}</td>
                             <td>${producto.precio}</td>
                             <td>${producto.stock}</td>
-                            <td>${producto.nombre_categoria}</td>
+                            <td>${producto.nombre_categoria || ''}</td>
                             <td>
                                 <button onclick="editarProducto(${producto.id})">Editar</button>
                                 <button onclick="eliminarProducto(${producto.id})">Eliminar</button>
@@ -31,8 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.editarProducto = id => alert(`Editar producto ${id}`);
     window.eliminarProducto = id => {
         if(confirm('¿Eliminar este producto?')) {
-            fetch(`../../backend/app/rutas.php?ruta=productos&id=${id}`, { method:'DELETE' })
-                .then(res => res.json())
+            App.api.del(`/productos/${id}`)
                 .then(data => {
                     alert(data.mensaje);
                     cargarProductos();

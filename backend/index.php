@@ -1,14 +1,13 @@
 <?php
 // backend/index.php
+//
+// Archivo auxiliar: no es punto de entrada.
+// El servidor embebido o Apache deben apuntar a backend/publico/index.php
 
-// Las cabeceras CORS son manejadas por .htaccess, las removemos aquí para evitar redundancia.
+// Evitar includes rotos y no despachar desde aquí.
+require_once __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/app/configuracion/base_de_datos.php';
-require_once __DIR__ . '/app/nucleo/Enrutador.php';
-require_once __DIR__ . '/app/ayudantes/jwt_helper.php';
-require_once __DIR__ . '/app/rutas.php';
-
-// Manejar solicitudes preflight de CORS
+// Manejar solicitudes preflight de CORS sin cuerpo adicional.
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }

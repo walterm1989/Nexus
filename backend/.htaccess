@@ -6,11 +6,8 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Evita la reescritura para la carpeta de assets del frontend
-RewriteRule ^frontend/assets/(.*)$ frontend/assets/$1 [L,QSA]
-
-# Si la solicitud es para el backend, reescribe la URL a su index.php
-RewriteRule ^backend/(.*)$ backend/index.php [L,QSA]
+# Enrutamiento: todo el backend debe entrar por backend/publico/index.php
+RewriteRule ^backend/publico/(.*)$ backend/publico/index.php [L,QSA]
 
 # Para el resto de las solicitudes (frontend), reescribe a la carpeta frontend
 RewriteRule ^(.*)$ frontend/$1 [L,QSA]

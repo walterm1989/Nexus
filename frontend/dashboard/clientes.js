@@ -10,9 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let editId = null;
 
     function cargarClientes() {
-        // CORREGIDO: Cambiar la URL de la petición para apuntar a index.php
-        fetch(`../../backend/index.php?ruta=clientes`)
-            .then(res => res.json())
+        App.api.get('/clientes')
             .then(data => {
                 tablaBody.innerHTML = '';
                 if(data.estado === 'exito') {
@@ -54,9 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.editarCliente = id => {
         editId = id;
         modalTitle.textContent = 'Editar cliente';
-        // CORREGIDO: Cambiar la URL de la petición para apuntar a index.php
-        fetch(`../../backend/index.php?ruta=clientes&id=${id}`)
-            .then(res => res.json())
+        App.api.get(`/clientes/${id}`)
             .then(data => {
                 if (data.estado === 'exito') {
                     const cliente = data.datos;
@@ -71,9 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarCliente = id => {
         if(confirm('¿Eliminar este cliente?')) {
-            // CORREGIDO: Cambiar la URL de la petición para apuntar a index.php
-            fetch(`../../backend/index.php?ruta=clientes&id=${id}`, { method: 'DELETE' })
-                .then(res => res.json())
+            App.api.del(`/clientes/${id}`)
                 .then(data => {
                     alert(data.mensaje);
                     cargarClientes();
@@ -89,27 +83,21 @@ document.addEventListener('DOMContentLoaded', () => {
             direccion: inputDireccion.value
         };
 
-        let url = `../../backend/index.php?ruta=clientes`;
-        let method = 'POST';
-
         if (editId) {
-            url += `&id=${editId}`;
-            method = 'PUT';
+            App.api.put(`/clientes/${editId}`, cliente)
+                .then(data => {
+                    alert(data.mensaje);
+                    modal.classList.add('hidden');
+                    cargarClientes();
+                });
+        } else {
+            App.api.post('/clientes', cliente)
+                .then(data => {
+                    alert(data.mensaje);
+                    modal.classList.add('hidden');
+                    cargarClientes();
+                });
         }
-
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(cliente)
-        })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.mensaje);
-            modal.classList.add('hidden');
-            cargarClientes();
-        });
     };
 
     cargarClientes();

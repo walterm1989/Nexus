@@ -1,7 +1,7 @@
 // frontend/js/main.js
 
-// ⛳ Ajusta esto si tu backend público está en otro lugar
-const BASE_URL = 'http://localhost/nexus_inventario/backend/publico/index.php';
+// Dev: servidor embebido PHP
+const BASE_URL = 'http://127.0.0.1:8000';
 
 // --- Auth helpers ---
 function setToken(token){ localStorage.setItem('token', token); }
@@ -13,10 +13,9 @@ function requireAuth(){
   if(!getToken()){ location.href = '../login/index.php'; }
 }
 
-// --- Fetch helper con método y body ---
-async function apiRequest(ruta, method='GET', body=null, query=null){
-  const url = new URL(BASE_URL);
-  url.searchParams.set('ruta', ruta);
+// --- Fetch helper por path ---
+async function apiRequest(path, method='GET', body=null, query=null){
+  const url = new URL((path.startsWith('http') ? path : (BASE_URL + (path.startsWith('/')? path : '/' + path))));
   if(query && typeof query==='object'){
     Object.entries(query).forEach(([k,v]) => {
       if(v!==undefined && v!==null) url.searchParams.set(k, v);
@@ -44,10 +43,10 @@ async function apiRequest(ruta, method='GET', body=null, query=null){
 }
 
 const api = {
-  get: (ruta, query) => apiRequest(ruta,'GET',null,query),
-  post: (ruta, body, query) => apiRequest(ruta,'POST',body,query),
-  put: (ruta, body, query) => apiRequest(ruta,'PUT',body,query),
-  del: (ruta, query) => apiRequest(ruta,'DELETE',null,query),
+  get: (path, query) => apiRequest(path,'GET',null,query),
+  post: (path, body, query) => apiRequest(path,'POST',body,query),
+  put: (path, body, query) => apiRequest(path,'PUT',body,query),
+  del: (path, query) => apiRequest(path,'DELETE',null,query),
 };
 
 // --- UI helpers ---
